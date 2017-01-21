@@ -4,29 +4,30 @@ import pickle
 import requests
 from Notification import Notification
 
-manga = "Wu Dong Qian Kun"
-
-if not os.path.exists('manga.txt'):
-	open('manga.txt', 'wb')
-
-def charger_parametres(file):
+def charger_parametres():
 	"""Extrait les paramètres d'un fichier texte dedié"""
 	parametres = []
-	with open(file + ".txt", "rb") as fichier:
+	with open("save.manga", "rb") as fichier:
 		pickler = pickle.Unpickler(fichier)
-		parametres.append(pickler.load())
+		try:
+			save = pickler.load()
+		except EOFError:
+			return []
+		parametres.append(save)
 		return parametres
 
-def maj_parametres(file, manga, url):
+def maj_parametres(manga, url):
 	"""Re-écrit les paramètres d'un fichier texte dedié"""
-	with open(file + ".txt", "rb") as fichier:
+	parametres = charger_parametres()
+	with open("save.manga", "rb") as fichier:
 		mon_pickler = pickle.Pickler(fichier)
 		if parametres[manga] is not None:
 			print("Manga déja existant.")
-		parametres = charger_parametres(file)
-		parametres[manga] = manga
-		parametres[manga + "_URL"] = url
-		parametres[manga + "_CHAP"] = test_manga(url, 0)
+		parametres = charger_parametres()
+		parametre[manga] = manga
+		parametre[manga + "_URL"] = url
+		parametre[manga + "_CHAP"] = test_manga(url, 0)
+		parametres[manga] = parametre
 		mon_pickler.dump(tamp)
 
 def test_manga(manga, url, chapitre):
@@ -63,12 +64,17 @@ def test_manga(manga, url, chapitre):
 	return chapitre_actu
 
 
-print(manga + " : " + test_manga(manga, "http://mangafox.me/manga/wu_dong_qian_kun/", 47))
-print(manga + " : " + test_manga(manga, "http://mangafox.me/manga/doupo_cangqiong/", 47))
-print(manga + " : " + test_manga(manga, "http://mangafox.me/manga/doulou_dalu/", 47))
-print(manga + " : " + test_manga(manga, "http://mangafox.me/manga/wu_dong_qian_kun/", 47))
-print(manga + " : " + test_manga(manga, "http://mangafox.me/manga/wu_dong_qian_kun/", 47))
-print(manga + " : " + test_manga(manga, "http://mangafox.me/manga/wu_dong_qian_kun/", 47))
+if not os.path.exists('save.manga'):
+	open('save.manga', 'wb')
+	print("mang")
+
+parametres = charger_parametres()
+
+for parametre in parametres:
+	print(parametre[manga] + " : " + test_manga(parametre[manga], parametre[manga + "_URL"], parametre[manga + "_CHAP"]))
+
+
+maj_parametres("Wu Dong Qian Kun", "http://mangafox.me/manga/wu_dong_qian_kun/")
 
 #.withdraw()
 #Hides the window. Restore it with .deiconify() or .iconify().
