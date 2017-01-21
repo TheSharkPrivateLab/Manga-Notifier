@@ -2,6 +2,7 @@ import os
 import time
 import pickle
 import requests
+from Notification import Notification
 
 manga = "Wu Dong Qian Kun"
 
@@ -56,13 +57,18 @@ def test_manga(manga, url, chapitre):
 			chapitre_actu += i
 
 		if chapitre < int(chapitre_actu):
-			print("MAJ")
-		return chapitre_actu
+			chapitre_actu += " (new)"
+			Notification("New Chapter !", manga + " has release the " + chapitre_actu + " tome !")
+
+	return chapitre_actu
 
 
-print(manga + " : " + test_manga("http://mangafox.me/manga/wu_dong_qian_kun/", 47))
-print(manga + " : " + test_manga("http://mangafox.me/manga/doupo_cangqiong/", 47))
-print(manga + " : " + test_manga("http://mangafox.me/manga/doulou_dalu/", 47))
-print(manga + " : " + test_manga("http://mangafox.me/manga/wu_dong_qian_kun/", 47))
-print(manga + " : " + test_manga("http://mangafox.me/manga/wu_dong_qian_kun/", 47))
-print(manga + " : " + test_manga("http://mangafox.me/manga/wu_dong_qian_kun/", 47))
+print(manga + " : " + test_manga(manga, "http://mangafox.me/manga/wu_dong_qian_kun/", 47))
+print(manga + " : " + test_manga(manga, "http://mangafox.me/manga/doupo_cangqiong/", 47))
+print(manga + " : " + test_manga(manga, "http://mangafox.me/manga/doulou_dalu/", 47))
+print(manga + " : " + test_manga(manga, "http://mangafox.me/manga/wu_dong_qian_kun/", 47))
+print(manga + " : " + test_manga(manga, "http://mangafox.me/manga/wu_dong_qian_kun/", 47))
+print(manga + " : " + test_manga(manga, "http://mangafox.me/manga/wu_dong_qian_kun/", 47))
+
+#.withdraw()
+#Hides the window. Restore it with .deiconify() or .iconify().
