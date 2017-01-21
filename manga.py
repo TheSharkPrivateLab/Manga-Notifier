@@ -6,13 +6,13 @@ from Notification import Notification
 
 def charger_parametres():
 	"""Extrait les paramètres d'un fichier texte dedié"""
-	parametres = []
+	parametres = dict()
 	with open("save.manga", "rb") as fichier:
 		pickler = pickle.Unpickler(fichier)
 		try:
 			save = pickler.load()
 		except EOFError:
-			return []
+			return dict()
 		parametres.append(save)
 		return parametres
 
@@ -21,14 +21,16 @@ def maj_parametres(manga, url):
 	parametres = charger_parametres()
 	with open("save.manga", "rb") as fichier:
 		mon_pickler = pickle.Pickler(fichier)
-		if parametres[manga] is not None:
+		if manga in parametres:
 			print("Manga déja existant.")
+			return
+		parametre = dict()
 		parametres = charger_parametres()
 		parametre[manga] = manga
 		parametre[manga + "_URL"] = url
-		parametre[manga + "_CHAP"] = test_manga(url, 0)
+		parametre[manga + "_CHAP"] = test_manga(manga, url, 0)
 		parametres[manga] = parametre
-		mon_pickler.dump(tamp)
+		mon_pickler.dump(parametres)
 
 def test_manga(manga, url, chapitre):
 	chapitre_actu = ""
