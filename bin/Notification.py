@@ -24,13 +24,13 @@ class WindowsBalloonTip:
                 0, 0, win32con.CW_USEDEFAULT, win32con.CW_USEDEFAULT, \
                 0, 0, hinst, None)
         UpdateWindow(self.hwnd)
-        iconPathName = os.path.abspath(os.path.join( sys.path[0], "balloontip.ico" ))
+        iconPathName = os.path.abspath(os.path.join( sys.path[0], "manganotifier.ico" ))
         icon_flags = win32con.LR_LOADFROMFILE | win32con.LR_DEFAULTSIZE
         try:
            hicon = LoadImage(hinst, iconPathName, \
-                    win32con.IMAGE_ICON, 0, 0, icon_flags)
+                    win32con.IMAGE_ICON, 100, 100, icon_flags)
         except:
-          hicon = LoadIcon(0, win32con.IDI_APPLICATION)
+           hicon = LoadIcon(0, win32con.IDI_ASTERISK)
         flags = NIF_ICON | NIF_MESSAGE | NIF_TIP
         nid = (self.hwnd, 0, flags, win32con.WM_USER+20, hicon, "tooltip")
         Shell_NotifyIcon(NIM_ADD, nid)
@@ -38,7 +38,6 @@ class WindowsBalloonTip:
                          (self.hwnd, 0, NIF_INFO, win32con.WM_USER+20,\
                           hicon, "Balloon  tooltip",msg,200,title))
         # self.show_balloon(title, msg)
-        time.sleep(10)
         DestroyWindow(self.hwnd)
         UnregisterClass(classAtom, hinst)
     def OnDestroy(self, hwnd, msg, wparam, lparam):
